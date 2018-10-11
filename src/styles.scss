@@ -1,0 +1,14 @@
+/* You can add global styles to this file, and also import other style files */
+html, body {
+  margin: 0;
+  padding: 0;
+
+  height: 95%;
+}
+
+// For styling with ng click without href
+a {
+  color: -webkit-link;
+  cursor: pointer;
+  text-decoration: underline;
+}

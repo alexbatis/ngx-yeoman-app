@@ -1,0 +1,87 @@
+<div *ngVar="(yeomanState$ | async) as yeomanState">
+  <h1>ngx-yeoman-app</h1>
+  <hr>
+  <div class="container">
+    <div id="installedGenerators" *ngIf="!yeomanState.selectedGenerator">
+      <h2>Your Installed Generators</h2>
+      <ng-container *ngIf="yeomanState.installedGenerators.loading; then generatorsLoading; else generators">
+      </ng-container>
+      <ng-template #generators>
+        <div>
+          <h4>You have {{ yeomanState.installedGenerators.value.length }} installed yeoman generators</h4>
+          <ul>
+            <li *ngFor="let installedGenerator of yeomanState.installedGenerators.value">
+              <a (click)="selectGenerator(installedGenerator)">{{installedGenerator.name}}</a>
+            </li>
+          </ul>
+        </div>
+      </ng-template>
+      <ng-template #generatorsLoading>
+        <div>
+          Loading installed generators
+        </div>
+      </ng-template>
+    </div>
+
+    <div id="selectedGenerator" *ngIf="yeomanState.selectedGenerator && !yeomanState.promptQuestions">
+      <h3>You've Selected {{yeomanState.selectedGenerator.name}} <button (click)="selectGenerator(null)">Start Over</button></h3>
+
+
+      <h4>Select the directory where you would like to run this generator</h4>
+      <button (click)="openDirectoryChooser()">Choose Directory</button>
+      <input (change)="setSelectedDirectoryPath()" type="file" id="directory-chooser" style="visibility:hidden"
+        webkitdirectory directory multiple />
+
+      <div *ngIf="yeomanState.selectedDirectoryPath">
+        <h4>You've chosen to run the generator in {{yeomanState.selectedDirectoryPath}}</h4>
+      </div>
+
+      <br>
+      <br>
+      <button *ngIf="yeomanState.selectedDirectoryPath" (click)="runGenerator()">Run Generator</button>
+    </div>
+
+    <div id="promptQuestions" *ngIf="yeomanState.promptQuestions">
+      <div *ngFor="let question of yeomanState.promptQuestions; let i = index;">
+
+        <div [ngSwitch]="question.type">
+          <div *ngSwitchCase="'input'">
+            {{question.message}}
+            <input type="text" value="{{question.default}}" [(ngModel)]="answers[question.name]">
+          </div>
+          <div *ngSwitchCase="'checkbox'">
+            {{question.message}}
+            <ul>
+              <li *ngFor="let choice of question.choices; let j = index">
+                <input type="checkbox" [(ngModel)]="answers[question.name].choices[j].selected">{{choice.name}}
+              </li>
+            </ul>
+          </div>
+          <div *ngSwitchCase="'confirm'">
+            {{question.message}}
+            <input type="checkbox" value="{{question.default}}" [(ngModel)]="answers[question.name]">
+          </div>
+          <div *ngSwitchCase="'expand'">
+            {{question.message}}
+            <div *ngFor="let choice of question.choices">
+              <input type="radio" value="{{choice.value}}" [(ngModel)]="answers[question.name]">{{choice.name}}
+            </div>
+          </div>
+          <div *ngSwitchDefault>
+            {{question.message}}
+            <input type="text" id="{{question.name}}" name="{{question.name}}" value="{{question.default}}" [(ngModel)]="answers[question.name]">
+          </div>
+        </div>
+      </div>
+      <br>
+      <button (click)="submitAnswers()">Submit</button>
+    </div>
+
+    <!-- <br><br><br><br>
+    <button (click)="init()">generator:init</button>
+    <button (click)="selectDirectory()">generator:directory-selected</button>
+    <button (click)="runGenerator()">generator:run</button>
+    <button (click)="promptQuestions()">generator:prompt-questions</button>
+    <button (click)="promptAnswer()">generator:prompt-answer</button> -->
+  </div>
+</div>
