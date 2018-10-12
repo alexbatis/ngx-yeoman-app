@@ -7,7 +7,8 @@ import {
   SetSelectedDirectoryPathAction,
   SetSelectedGeneratorAction,
   RunSelectedGeneratorAction,
-  SubmitGeneratorPromptAnswersAction
+  SubmitGeneratorPromptAnswersAction,
+  PromptDirectoryPathAction
 } from '@app/core/reducers/yeoman.reducer';
 
 @Component({
@@ -57,7 +58,8 @@ export class HomeComponent implements OnInit {
   }
 
   openDirectoryChooser() {
-    document.getElementById('directory-chooser').click();
+    // document.getElementById('directory-chooser').click();
+    this.store.dispatch(new PromptDirectoryPathAction());
   }
 
   setSelectedDirectoryPath() {
@@ -71,41 +73,6 @@ export class HomeComponent implements OnInit {
 
   submitAnswers() {
     this.store.dispatch(new SubmitGeneratorPromptAnswersAction({ answers: this.answers }));
-  }
-
-
-  init() {
-    console.log('sending generator:init');
-    require('electron').ipcRenderer.send('context-generator', 'generator:init');
-  }
-
-  selectDirectory() {
-    console.log('sending generator:directory-selected');
-    require('electron').ipcRenderer.send('context-generator', 'generator:directory-selected',
-      'C:\\Users\\Alex\\Desktop');
-  }
-
-  runGeneratorOld() {
-    console.log('sending generator:run');
-    require('electron').ipcRenderer.send('context-generator', 'generator:run', 'node-ts-express',
-      'C:\\Users\\Alex\\Desktop');
-
-
-    // // // // C:\\Users\\Alex\\Downloads\\test-app.json
-    // require('electron').ipcRenderer.send('context-generator', 'generator:prompt-answer', {});
-  }
-
-  promptQuestions() {
-    console.log('sending generator:prompt-questions');
-    require('electron').ipcRenderer.send('context-generator', 'generator:prompt-questions');
-  }
-
-  promptAnswer() {
-    console.log('sending generator:prompt-answer');
-    require('electron').ipcRenderer.send('context-generator', 'generator:prompt-answer', {
-      configurationFileDirectory: 'configuration.json',
-      outputDirectory: 'C:\\Users\\Alex\\Desktop'
-    });
   }
 
 }

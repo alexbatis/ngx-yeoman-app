@@ -3,6 +3,7 @@ var _ = require('lodash');
 var findup = require('findup-sync');
 var semver = require('semver');
 var environment = require('./environment');
+const dialog = require('electron').dialog;
 
 var env = null;
 
@@ -70,6 +71,7 @@ function run(generatorName, cwd) {
   }
 
   process.chdir(cwd);
+  console.log('in run - ' + process.cwd());
 
   var prefix = 'generator-';
   if (generatorName.indexOf(prefix) === 0) {
@@ -84,22 +86,44 @@ function run(generatorName, cwd) {
 
   var triggerInstall = _.once(_.partial(sendCommandToAppWindow, 'generator:install'));
 
+  // const env = environment([],{
+  //   cwd : process.cwd()
+  // });
+
+  env.cwd = process.cwd();
+  console.log(env);
+
   env.run(generatorName, done)
     .on('npmInstall', triggerInstall)
     .on('bowerInstall', triggerInstall)
     .on('end', function () {
-      sendCommandToAppWindow('generator:done', cwd);
+      sendCommandToAppWindow('generator:done', process.cwd());
     });
 }
 
 function promptAnswer(answer) {
+  console.log('in promptAnswer' + process.cwd());
   env.adapter.answerCallback(answer);
+}
+
+function testEvent(newDirectory) {
+  console.log('test');
+  console.log(process.cwd());
+  console.log(newDirectory);
+  process.chdir(newDirectory);
+  console.log('New directory: ' + process.cwd());
+}
+
+function selectTargetDirectory() {
+  sendCommandToAppWindow('open-dialog');
 }
 
 var api = {
   'generator:init': init,
   'generator:run': run,
-  'generator:prompt-answer': promptAnswer
+  'generator:prompt-answer': promptAnswer,
+  'generator:open-dialog': selectTargetDirectory,
+  'generator:test': testEvent
 };
 
 process.on('message', function (msg) {

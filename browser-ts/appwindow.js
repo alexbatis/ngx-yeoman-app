@@ -12,6 +12,7 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var electron = require('electron');
 var dialog = electron.dialog;
+// const { dialog } = require('electron').remote;
 var BrowserWindow = electron.BrowserWindow;
 var shell = electron.shell;
 var path = require('path');
@@ -81,26 +82,26 @@ var AppWindow = /** @class */ (function (_super) {
             this.emit('closed', e);
         }.bind(this));
         this.on('generator-cancel', this.killYoProcess);
-        // this.on('open-dialog', this.selectTargetDirectory);
+        this.on('open-dialog', this.selectTargetDirectory);
         this.on('generator:done', this.openProject);
     };
-    // selectTargetDirectory() {
-    //   const opts = {
-    //     title: 'Select a folder to generate the project into',
-    //     properties: ['openDirectory', 'createDirectory']
-    //   };
-    //   dialog.showOpenDialog(this.window, opts, function (filenames) {
-    //     if (!filenames) {
-    //       return;
-    //     }
-    //     this.sendCommandToBrowserWindow('generator:directory-selected', filenames.shift());
-    //   }.bind(this));
-    // };
+    AppWindow.prototype.selectTargetDirectory = function () {
+        var opts = {
+            title: 'Select a folder to generate the project into',
+            properties: ['openDirectory']
+        };
+        dialog.showOpenDialog(this.window, opts, function (filenames) {
+            if (!filenames) {
+                return;
+            }
+            this.sendCommandToBrowserWindow('generator:directory-selected', filenames.shift());
+        }.bind(this));
+    };
     AppWindow.prototype.openProject = function (cwd) {
         if (!cwd) {
             return;
         }
-        shell.showItemInFolder(cwd);
+        var shown = shell.showItemInFolder(process.cwd());
     };
     AppWindow.prototype.initYoProcess = function () {
         if (this.loadSettings.isSpec) {

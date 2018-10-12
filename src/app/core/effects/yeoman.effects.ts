@@ -9,7 +9,8 @@ import {
     RunSelectedGeneratorAction,
     YeomanState,
     SubmitGeneratorPromptAnswersAction,
-    InitializeYeomanStateAction
+    InitializeYeomanStateAction,
+    PromptDirectoryPathAction
 } from '@app/core/reducers/yeoman.reducer';
 
 @Injectable()
@@ -19,6 +20,14 @@ export class YeomanEffects {
         private actions$: Actions<Action>,
         private electronService: ElectronService
     ) { }
+
+    @Effect({ dispatch: false })
+    promptDirectoryPath$: Observable<Action> = this.actions$.pipe(
+        ofType(YeomanActionTypes.PROMPT_DIRECTORY_PATH),
+        tap((action: PromptDirectoryPathAction) => {
+            this.electronService.promptDirectoryPath();
+        })
+    );
 
     @Effect({ dispatch: false })
     runGenerator$: Observable<Action> = this.actions$.pipe(

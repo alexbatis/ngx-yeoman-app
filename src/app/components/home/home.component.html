@@ -23,14 +23,17 @@
       </ng-template>
     </div>
 
+
     <div id="selectedGenerator" *ngIf="yeomanState.selectedGenerator && !yeomanState.promptQuestions">
       <h3>You've Selected {{yeomanState.selectedGenerator.name}} <button (click)="selectGenerator(null)">Start Over</button></h3>
 
 
       <h4>Select the directory where you would like to run this generator</h4>
-      <button (click)="openDirectoryChooser()">Choose Directory</button>
+      <!-- <button (click)="openDirectoryChooser()">Choose Directory</button>
       <input (change)="setSelectedDirectoryPath()" type="file" id="directory-chooser" style="visibility:hidden"
-        webkitdirectory directory multiple />
+        webkitdirectory directory multiple /> -->
+      <button (click)="openDirectoryChooser()">Choose Directory</button>
+
 
       <div *ngIf="yeomanState.selectedDirectoryPath">
         <h4>You've chosen to run the generator in {{yeomanState.selectedDirectoryPath}}</h4>

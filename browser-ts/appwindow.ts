@@ -1,11 +1,14 @@
 import { Global } from './../main';
 const electron = require('electron');
 const dialog = electron.dialog;
+// const { dialog } = require('electron').remote;
+
 const BrowserWindow = electron.BrowserWindow;
 const shell = electron.shell;
 const path = require('path');
 const url = require('url');
 import { EventEmitter } from 'events';
+import { OpenDialogOptions } from 'electron';
 const fork = require('child_process').fork;
 const _ = require('underscore-plus');
 const killChildProcess = require('./util/kill-childprocess');
@@ -89,32 +92,32 @@ export default class AppWindow extends EventEmitter {
     this.window.on('closed', function (e) {
       this.emit('closed', e);
     }.bind(this));
-
     this.on('generator-cancel', this.killYoProcess);
-    // this.on('open-dialog', this.selectTargetDirectory);
+    this.on('open-dialog', this.selectTargetDirectory);
     this.on('generator:done', this.openProject);
   }
 
-  // selectTargetDirectory() {
-  //   const opts = {
-  //     title: 'Select a folder to generate the project into',
-  //     properties: ['openDirectory', 'createDirectory']
-  //   };
+  selectTargetDirectory() {
+    const opts: OpenDialogOptions = {
+      title: 'Select a folder to generate the project into',
+      properties: ['openDirectory']
+    };
 
-  //   dialog.showOpenDialog(this.window, opts, function (filenames) {
-  //     if (!filenames) {
-  //       return;
-  //     }
-  //     this.sendCommandToBrowserWindow('generator:directory-selected', filenames.shift());
-  //   }.bind(this));
-  // };
+    dialog.showOpenDialog(this.window, opts, function (filenames) {
+      if (!filenames) {
+        return;
+      }
+
+      this.sendCommandToBrowserWindow('generator:directory-selected', filenames.shift());
+    }.bind(this));
+  }
 
   openProject(cwd) {
     if (!cwd) {
       return;
     }
 
-    shell.showItemInFolder(cwd);
+    const shown = shell.showItemInFolder(process.cwd());
   }
 
   initYoProcess() {

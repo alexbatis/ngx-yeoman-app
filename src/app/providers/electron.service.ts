@@ -2,7 +2,8 @@ import { YeomanGeneratorQuestion } from './../models/YeomanGeneratorQuestion';
 import {
   SetInstalledGeneratorsAction,
   SetGeneratorPromptQuestionsAction,
-  InitializeYeomanStateAction
+  InitializeYeomanStateAction,
+  SetSelectedDirectoryPathAction
 } from './../core/reducers/yeoman.reducer';
 import { CommonService } from './common/common.service';
 import { Injectable } from '@angular/core';
@@ -13,7 +14,6 @@ import { ipcRenderer, webFrame, remote } from 'electron';
 import * as childProcess from 'child_process';
 import * as fs from 'fs';
 import { Store } from '@ngrx/store';
-import { GetInstalledGeneratorsAction } from '@app/core/reducers/yeoman.reducer';
 import { YeomanGenerator } from '@app/models/YeomanGenerator';
 
 @Injectable()
@@ -54,6 +54,8 @@ export class ElectronService {
             this.promptQuestions(data);
           else if (event === 'generator:done')
             this.completeGenerator(data);
+          else if (event === 'generator:directory-selected')
+            this.setDirectoryPath(data);
 
           // console.log(event, data);
         });
@@ -72,6 +74,14 @@ export class ElectronService {
   setInstalledGenerators(data: any) {
     const generators = this.commonService.deserializeArray<YeomanGenerator>(data, YeomanGenerator);
     this.store.dispatch(new SetInstalledGeneratorsAction({ installedGenerators: generators }));
+  }
+
+  promptDirectoryPath() {
+    this.ipcRenderer.send('context-generator', 'generator:open-dialog');
+  }
+
+  setDirectoryPath(data: string) {
+    this.store.dispatch(new SetSelectedDirectoryPathAction({ selectedDirectoryPath: data }));
   }
 
   runSelectedGenerator(selectedGeneratorName: string, selectedDirectoryPath: string) {

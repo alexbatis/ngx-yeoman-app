@@ -9,6 +9,7 @@ export enum YeomanActionTypes {
     GET_INSTALLED_GENERATORS = '[Yeoman] Get Installed Generators',
     SET_INSTALLED_GENERATORS = '[Yeoman] Set Installed Generators',
     SET_SELECTED_GENERATOR = '[Yeoman] Set Selected Generator',
+    PROMPT_DIRECTORY_PATH = '[Yeoman] Prompt directory path',
     SET_SELECTED_DIRECTORY_PATH = '[Yeoman] Set selected directory path',
     RUN_SELECTED_GENERATOR = '[Yeoman] Run Selected Generator',
     SET_GENERATOR_PROMPT_QUESTIONS = '[Yeoman] Set Generator Prompt Questions',
@@ -32,6 +33,10 @@ export class SetInstalledGeneratorsAction implements Action {
 export class SetSelectedGeneratorAction implements Action {
     readonly type = YeomanActionTypes.SET_SELECTED_GENERATOR;
     constructor(public payload: { selectedGenerator: YeomanGenerator }) { }
+}
+
+export class PromptDirectoryPathAction implements Action {
+    readonly type = YeomanActionTypes.PROMPT_DIRECTORY_PATH;
 }
 
 export class SetSelectedDirectoryPathAction implements Action {
