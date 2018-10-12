@@ -71,8 +71,6 @@ function run(generatorName, cwd) {
   }
 
   process.chdir(cwd);
-  console.log('in run - ' + process.cwd());
-
   var prefix = 'generator-';
   if (generatorName.indexOf(prefix) === 0) {
     generatorName = generatorName.slice(prefix.length);
@@ -86,12 +84,7 @@ function run(generatorName, cwd) {
 
   var triggerInstall = _.once(_.partial(sendCommandToAppWindow, 'generator:install'));
 
-  // const env = environment([],{
-  //   cwd : process.cwd()
-  // });
-
   env.cwd = process.cwd();
-  console.log(env);
 
   env.run(generatorName, done)
     .on('npmInstall', triggerInstall)
@@ -102,16 +95,11 @@ function run(generatorName, cwd) {
 }
 
 function promptAnswer(answer) {
-  console.log('in promptAnswer' + process.cwd());
   env.adapter.answerCallback(answer);
 }
 
 function testEvent(newDirectory) {
   console.log('test');
-  console.log(process.cwd());
-  console.log(newDirectory);
-  process.chdir(newDirectory);
-  console.log('New directory: ' + process.cwd());
 }
 
 function selectTargetDirectory() {

@@ -22,6 +22,7 @@ import { HomeComponent } from './components/home/home.component';
 import { CoreModule } from '@app/core';
 import { CommonService } from '@app/providers/common/common.service';
 import { VarDirective } from '@app/shared/NgVar.directive';
+import { LoadingComponent } from './components/loading/loading.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -33,7 +34,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     AppComponent,
     HomeComponent,
     VarDirective,
-    WebviewDirective
+    WebviewDirective,
+    LoadingComponent
   ],
   imports: [
     BrowserModule,

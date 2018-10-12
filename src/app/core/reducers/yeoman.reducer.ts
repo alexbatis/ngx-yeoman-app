@@ -80,6 +80,7 @@ export interface YeomanState {
     selectedGenerator: YeomanGenerator;
     promptQuestions: Array<YeomanGeneratorQuestion>;
     promptAnswers: object;
+    generatorRunning: boolean;
 }
 export const initialState: YeomanState = {
     installedGenerators: {
@@ -89,7 +90,8 @@ export const initialState: YeomanState = {
     selectedDirectoryPath: null,
     selectedGenerator: null,
     promptQuestions: null,
-    promptAnswers: {}
+    promptAnswers: {},
+    generatorRunning: false
 };
 
 /*--------------------REDUCER-------------------------------------------*/
@@ -121,12 +123,19 @@ export function yeomanReducer(
         case YeomanActionTypes.SET_GENERATOR_PROMPT_QUESTIONS:
             return {
                 ...state,
-                promptQuestions: action.payload.promptQuestions
+                promptQuestions: action.payload.promptQuestions,
+                generatorRunning: false
             };
         case YeomanActionTypes.SUBMIT_GENERATOR_PROMPT_ANSWERS:
             return {
                 ...state,
-                promptAnswers: action.payload.answers
+                promptAnswers: action.payload.answers,
+                generatorRunning: true
+            };
+        case YeomanActionTypes.RUN_SELECTED_GENERATOR:
+            return {
+                ...state,
+                generatorRunning: true
             };
         default:
             return state;
