@@ -117,7 +117,7 @@ export default class AppWindow extends EventEmitter {
       return;
     }
 
-    const shown = shell.showItemInFolder(cwd);
+    shell.showItemInFolder(cwd);
   }
 
   initYoProcess() {

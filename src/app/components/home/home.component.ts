@@ -58,13 +58,7 @@ export class HomeComponent implements OnInit {
   }
 
   openDirectoryChooser() {
-    // document.getElementById('directory-chooser').click();
     this.store.dispatch(new PromptDirectoryPathAction());
-  }
-
-  setSelectedDirectoryPath() {
-    const selectedDirectoryPath = (document.getElementById('directory-chooser')['files'][0].path) || null;
-    this.store.dispatch(new SetSelectedDirectoryPathAction({ selectedDirectoryPath: selectedDirectoryPath }));
   }
 
   runGenerator() {

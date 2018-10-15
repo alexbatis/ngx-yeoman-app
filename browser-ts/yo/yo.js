@@ -3,7 +3,6 @@ var _ = require('lodash');
 var findup = require('findup-sync');
 var semver = require('semver');
 var environment = require('./environment');
-const dialog = require('electron').dialog;
 
 var env = null;
 
@@ -70,7 +69,7 @@ function run(generatorName, cwd) {
     return sendCommandToAppWindow('generator:error', new Error('The given path does not exist or is not a directory'));
   }
 
-  process.chdir(cwd);
+  process.chdir(cwd); // TODO: is this breaking the packaged build??
   var prefix = 'generator-';
   if (generatorName.indexOf(prefix) === 0) {
     generatorName = generatorName.slice(prefix.length);

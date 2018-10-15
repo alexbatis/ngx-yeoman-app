@@ -101,7 +101,7 @@ var AppWindow = /** @class */ (function (_super) {
         if (!cwd) {
             return;
         }
-        var shown = shell.showItemInFolder(cwd);
+        shell.showItemInFolder(cwd);
     };
     AppWindow.prototype.initYoProcess = function () {
         if (this.loadSettings.isSpec) {
